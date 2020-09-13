@@ -24,17 +24,14 @@ public class ClosestLessonByStudentId {
     public void findClosetLessonForStudentByStudentId(Long studentId){
 
 
-                List<Lesson> lessons = session.load(Student.class, studentId)
+                Lesson closetLesson = session.load(Student.class, studentId)
                             .getGroup()
                             .getLessons()
                             .stream()
                             .filter(l -> l.getTimestamp().getEpochSecond() > Instant.now().getEpochSecond())
-                            .collect(Collectors.toList());
-
-                Lesson closetLesson = lessons
-                            .stream()
                             .min(Comparator.comparing(Lesson::getTimestamp))
                             .get();
+
 
                 Date myDate = Date.from(closetLesson.getTimestamp());
 

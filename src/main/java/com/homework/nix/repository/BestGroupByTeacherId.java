@@ -1,5 +1,6 @@
 package com.homework.nix.repository;
 
+import com.google.common.math.Quantiles;
 import com.homework.nix.entity.Group;
 import com.homework.nix.entity.Mark;
 import com.homework.nix.entity.Student;
@@ -25,25 +26,40 @@ public class BestGroupByTeacherId {
 
         List<List<Student>> listList = groups.stream().map(Group::getStudents).collect(Collectors.toList());
 
-        Map<Group, Double> integers = new HashMap<>();
+        Map<Group, List<Long>> mapGroupAndMarks = new HashMap<>();
 
 
         for (int i = 0; i < listList.size(); i++) {
-            integers.put(listList.get(i).stream().map(Student::getGroup).findFirst().get() ,listList.get(i)
+            mapGroupAndMarks.put(
+                    listList.get(i).stream().map(Student::getGroup).findFirst().get(),
+                    listList.get(i)
                     .stream()
                     .map(Student::getMarks)
                     .flatMap(Collection::stream)
                     .mapToLong(Mark::getMark)
-                    .average().getAsDouble());
+                    .sorted()
+                    .boxed()
+                    .collect(Collectors.toList()));
+        }
+        Map<Group, Double> mapGroupAndMedian = new HashMap<>();
+
+
+        for (int i = 0; i < mapGroupAndMarks.size(); i++) {
+             mapGroupAndMedian.put(
+                    (Group) mapGroupAndMarks.keySet().toArray()[i],
+                    Quantiles.median().compute(mapGroupAndMarks.get((Group) mapGroupAndMarks.keySet().toArray()[i]))
+            );
+
         }
 
-        Map<Group, Double> groupDoubleMap = sortMapByValueForSymbol(integers);
+
+        Map<Group, Double> groupDoubleMap = sortMapByValue(mapGroupAndMedian);
 
         Group bestGroup = groupDoubleMap.entrySet().stream().findFirst().get().getKey();
 
 
         System.out.println("Average mark on the exam of all groups:");
-        for (Map.Entry<Group, Double> entry : integers.entrySet()) {
+        for (Map.Entry<Group, Double> entry : mapGroupAndMedian.entrySet()) {
             System.out.println(entry.getKey().getGroupNumber() + " : " + entry.getValue());
         }
 
@@ -55,7 +71,7 @@ public class BestGroupByTeacherId {
         }
     }
 
-    public static Map<Group, Double> sortMapByValueForSymbol(final Map<Group, Double> groupDoubleMap) {
+    public static Map<Group, Double> sortMapByValue(final Map<Group, Double> groupDoubleMap) {
 
         return groupDoubleMap.entrySet()
 

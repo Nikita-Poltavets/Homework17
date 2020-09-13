@@ -116,7 +116,7 @@ public class MockDataLoader {
                 mark1.setStudent(student1);
 
                 Mark mark2 = new Mark();
-                mark2.setMark(90);
+                mark2.setMark(75);
                 mark2.setExam(exam);
                 mark2.setStudent(student2);
 
