@@ -15,8 +15,8 @@ public class Main {
             var session = sessionFactory.openSession()
         ) {
             try {
-//                ClosestLessonByStudentId closestLessonByStudentId = new ClosestLessonByStudentId(session);
-//                closestLessonByStudentId.findClosetLessonForStudentByStudentId((long)1);
+                ClosestLessonByStudentId closestLessonByStudentId = new ClosestLessonByStudentId(session);
+                closestLessonByStudentId.findClosetLessonForStudentByStudentId((long)1);
 
                 System.out.println("\n");
                 BestGroupByTeacherId bestGroupByTeacherId = new BestGroupByTeacherId(session);
