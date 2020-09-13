@@ -4,14 +4,11 @@ import com.homework.nix.entity.Lesson;
 import com.homework.nix.entity.Student;
 import com.homework.nix.entity.Topic;
 import org.hibernate.Session;
-import org.hibernate.cfg.Configuration;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ClosestLessonByStudentId {
 
@@ -22,7 +19,6 @@ public class ClosestLessonByStudentId {
     }
 
     public void findClosetLessonForStudentByStudentId(Long studentId){
-
 
                 Lesson closetLesson = session.load(Student.class, studentId)
                             .getGroup()
